@@ -1,0 +1,6 @@
+{
+  "name": "DeathReader",
+  "description": "High-contrast minimalist manga, novel, and book reader with offline progress tracking and cloud sync.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

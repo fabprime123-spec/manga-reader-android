@@ -1,0 +1,70 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128;
+    }
+
+    function isValidBook(data) {
+      return data.bookId is string && data.bookId.size() > 0 && data.bookId.size() <= 128 &&
+             data.userId is string && data.userId == request.auth.uid &&
+             data.title is string && data.title.size() > 0 && data.title.size() <= 256 &&
+             data.format is string && data.format.size() <= 32 &&
+             data.totalPages is int && data.totalPages >= 0 &&
+             data.currentPage is int && data.currentPage >= 0 &&
+             (!('author' in data) || (data.author is string && data.author.size() <= 256)) &&
+             (!('coverUrl' in data) || (data.coverUrl is string && data.coverUrl.size() <= 1024)) &&
+             (!('progressPercent' in data) || (data.progressPercent is number && data.progressPercent >= 0 && data.progressPercent <= 100)) &&
+             (!('isFavorite' in data) || data.isFavorite is bool) &&
+             (!('collectionName' in data) || (data.collectionName is string && data.collectionName.size() <= 128));
+    }
+
+    function isValidBookmark(data) {
+      return data.bookmarkId is string && data.bookmarkId.size() > 0 && data.bookmarkId.size() <= 128 &&
+             data.userId is string && data.userId == request.auth.uid &&
+             data.bookId is string && data.bookId.size() > 0 && data.bookId.size() <= 128 &&
+             data.pageIndex is int && data.pageIndex >= 0 &&
+             (!('title' in data) || (data.title is string && data.title.size() <= 256)) &&
+             (!('note' in data) || (data.note is string && data.note.size() <= 2048));
+    }
+
+    function isValidStats(data) {
+      return data.userId is string && data.userId == request.auth.uid &&
+             data.totalMinutesRead is int && data.totalMinutesRead >= 0 &&
+             data.pagesCompleted is int && data.pagesCompleted >= 0 &&
+             data.streakDays is int && data.streakDays >= 0 &&
+             (!('lastReadDate' in data) || (data.lastReadDate is string && data.lastReadDate.size() <= 32));
+    }
+
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+
+      match /books/{bookId} {
+        allow get, list: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidId(bookId) && isValidBook(request.resource.data);
+        allow delete: if isOwner(userId) && isValidId(bookId);
+      }
+
+      match /bookmarks/{bookmarkId} {
+        allow get, list: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidId(bookmarkId) && isValidBookmark(request.resource.data);
+        allow delete: if isOwner(userId) && isValidId(bookmarkId);
+      }
+
+      match /profile/{documentId} {
+        allow get: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidStats(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}

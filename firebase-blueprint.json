@@ -1,0 +1,172 @@
+{
+  "entities": {
+    "Book": {
+      "title": "Book",
+      "description": "User book or manga entry with reading progress and metadata",
+      "type": "object",
+      "properties": {
+        "bookId": {
+          "type": "string",
+          "description": "Unique identifier for the book or manga item"
+        },
+        "userId": {
+          "type": "string",
+          "description": "Owner user ID"
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the manga, novel or book"
+        },
+        "author": {
+          "type": "string",
+          "description": "Author, mangaka, or circle"
+        },
+        "format": {
+          "type": "string",
+          "description": "File format such as PDF, CBZ, TXT, EPUB, or MANGA"
+        },
+        "coverUrl": {
+          "type": "string",
+          "description": "Thumbnail or cover image URL/URI"
+        },
+        "totalPages": {
+          "type": "integer",
+          "description": "Total number of pages or chapters"
+        },
+        "currentPage": {
+          "type": "integer",
+          "description": "Current reading page index"
+        },
+        "progressPercent": {
+          "type": "number",
+          "description": "Reading progress percentage between 0 and 100"
+        },
+        "isFavorite": {
+          "type": "boolean",
+          "description": "Flag for marked favorites"
+        },
+        "collectionName": {
+          "type": "string",
+          "description": "User custom collection or shelf name"
+        },
+        "lastReadTimestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of the last reading session"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when book was imported or added"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when book metadata or progress was updated"
+        }
+      },
+      "required": [
+        "bookId",
+        "userId",
+        "title",
+        "format",
+        "totalPages",
+        "currentPage"
+      ]
+    },
+    "Bookmark": {
+      "title": "Bookmark",
+      "description": "Bookmark or note attached to a specific page",
+      "type": "object",
+      "properties": {
+        "bookmarkId": {
+          "type": "string",
+          "description": "Unique ID for the bookmark"
+        },
+        "userId": {
+          "type": "string",
+          "description": "Owner user ID"
+        },
+        "bookId": {
+          "type": "string",
+          "description": "Reference to the associated book"
+        },
+        "pageIndex": {
+          "type": "integer",
+          "description": "Page index of the bookmark"
+        },
+        "title": {
+          "type": "string",
+          "description": "Short bookmark title or excerpt"
+        },
+        "note": {
+          "type": "string",
+          "description": "User note or quote"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        }
+      },
+      "required": [
+        "bookmarkId",
+        "userId",
+        "bookId",
+        "pageIndex"
+      ]
+    },
+    "ReadingStats": {
+      "title": "ReadingStats",
+      "description": "User reading statistics, streak, and sync state",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "User ID"
+        },
+        "totalMinutesRead": {
+          "type": "integer",
+          "description": "Total reading minutes recorded"
+        },
+        "pagesCompleted": {
+          "type": "integer",
+          "description": "Total count of pages read"
+        },
+        "streakDays": {
+          "type": "integer",
+          "description": "Consecutive days read"
+        },
+        "lastReadDate": {
+          "type": "string",
+          "description": "Date formatted YYYY-MM-DD"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last stats sync timestamp"
+        }
+      },
+      "required": [
+        "userId",
+        "totalMinutesRead",
+        "pagesCompleted",
+        "streakDays"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/books/{bookId}": {
+      "entity": "Book",
+      "description": "User shelf books and manga reading progress"
+    },
+    "/users/{userId}/bookmarks/{bookmarkId}": {
+      "entity": "Bookmark",
+      "description": "User bookmarks across library items"
+    },
+    "/users/{userId}/profile/stats": {
+      "entity": "ReadingStats",
+      "description": "User reading statistics and sync profile"
+    }
+  }
+}

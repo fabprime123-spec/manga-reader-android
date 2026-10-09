@@ -1,0 +1,8 @@
+{
+  "firestore": [
+    {
+      "database": "ai-studio-android-deathrea-14a1184d-640d-4944-ae4d-27d4a31ae053",
+      "rules": "firestore.rules"
+    }
+  ]
+}
