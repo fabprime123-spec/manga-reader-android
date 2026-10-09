@@ -34,6 +34,7 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material.icons.filled.ViewList
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -102,7 +103,7 @@ fun LibraryTab(
             .padding(horizontal = 20.dp)
             .testTag("library_tab")
     ) {
-        // Header matching Screenshot 3: "library       sort | search | display"
+        // Header: Capitalized "Library" with icon buttons for Sort, Search, and Display mode
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -111,26 +112,30 @@ fun LibraryTab(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "library",
+                text = "Library",
                 color = BoneWhite,
                 fontSize = 32.sp,
-                fontWeight = FontWeight.Normal,
+                fontWeight = FontWeight.Bold,
                 fontFamily = FontFamily.SansSerif,
                 letterSpacing = 0.5.sp
             )
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                // "sort"
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                // Sort icon button
                 Box {
-                    Text(
-                        text = "sort",
-                        color = Color(0xFFC0C0C8),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Normal,
-                        modifier = Modifier
-                            .clickable { showSortMenu = true }
-                            .padding(horizontal = 4.dp, vertical = 4.dp)
-                    )
+                    IconButton(
+                        onClick = { showSortMenu = true },
+                        modifier = Modifier.size(44.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Sort,
+                            contentDescription = "Sort",
+                            tint = BoneWhite
+                        )
+                    }
                     DropdownMenu(
                         expanded = showSortMenu,
                         onDismissRequest = { showSortMenu = false },
@@ -154,51 +159,37 @@ fun LibraryTab(
                     }
                 }
 
-                Text(text = " | ", color = Color(0xFF707078), fontSize = 18.sp)
-
-                // "search"
-                Text(
-                    text = "search",
-                    color = if (isSearchExpanded) activeAccent.color else Color(0xFFC0C0C8),
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Normal,
-                    modifier = Modifier
-                        .clickable {
-                            isSearchExpanded = !isSearchExpanded
-                            if (!isSearchExpanded) {
-                                searchQuery = ""
-                                viewModel.updateSearchQuery("")
-                            }
+                // Search icon button
+                IconButton(
+                    onClick = {
+                        isSearchExpanded = !isSearchExpanded
+                        if (!isSearchExpanded) {
+                            searchQuery = ""
+                            viewModel.updateSearchQuery("")
                         }
-                        .padding(horizontal = 4.dp, vertical = 4.dp)
-                )
-
-                Text(text = " | ", color = Color(0xFF707078), fontSize = 18.sp)
-
-                // "display" (toggles grid or list as noted in drawing)
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(6.dp))
-                        .clickable {
-                            viewModel.setDisplayMode(
-                                if (displayMode == DisplayMode.GRID) DisplayMode.LIST else DisplayMode.GRID
-                            )
-                        }
-                        .padding(horizontal = 4.dp, vertical = 4.dp)
+                    },
+                    modifier = Modifier.size(44.dp)
                 ) {
-                    Text(
-                        text = "display",
-                        color = if (displayMode == DisplayMode.LIST) activeAccent.color else Color(0xFFC0C0C8),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Normal
-                    )
-                    Spacer(modifier = Modifier.width(3.dp))
                     Icon(
-                        imageVector = if (displayMode == DisplayMode.GRID) Icons.Default.GridView else Icons.Default.ViewList,
-                        contentDescription = "Toggle Display",
-                        tint = activeAccent.color,
-                        modifier = Modifier.size(16.dp)
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "Search",
+                        tint = if (isSearchExpanded) activeAccent.color else BoneWhite
+                    )
+                }
+
+                // Display mode toggle icon button (Grid vs List)
+                IconButton(
+                    onClick = {
+                        viewModel.setDisplayMode(
+                            if (displayMode == DisplayMode.GRID) DisplayMode.LIST else DisplayMode.GRID
+                        )
+                    },
+                    modifier = Modifier.size(44.dp)
+                ) {
+                    Icon(
+                        imageVector = if (displayMode == DisplayMode.GRID) Icons.Default.ViewList else Icons.Default.GridView,
+                        contentDescription = "Toggle Display Mode",
+                        tint = activeAccent.color
                     )
                 }
             }

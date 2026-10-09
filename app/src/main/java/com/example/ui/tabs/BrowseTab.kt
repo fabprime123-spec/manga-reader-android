@@ -189,30 +189,31 @@ fun BrowseTab(
                 }
             } else {
                 Text(
-                    text = "browse",
+                    text = "Browse",
                     color = BoneWhite,
                     fontSize = 32.sp,
-                    fontWeight = FontWeight.Normal,
+                    fontWeight = FontWeight.Bold,
                     fontFamily = FontFamily.SansSerif,
                     letterSpacing = 0.5.sp
                 )
             }
 
-            Text(
-                text = "search",
-                color = if (isSearchExpanded) activeAccent.color else Color(0xFFC0C0C8),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Normal,
-                modifier = Modifier
-                    .clickable {
-                        isSearchExpanded = !isSearchExpanded
-                        if (!isSearchExpanded) {
-                            searchQuery = ""
-                            viewModel.updateSearchQuery("")
-                        }
+            IconButton(
+                onClick = {
+                    isSearchExpanded = !isSearchExpanded
+                    if (!isSearchExpanded) {
+                        searchQuery = ""
+                        viewModel.updateSearchQuery("")
                     }
-                    .padding(horizontal = 6.dp, vertical = 4.dp)
-            )
+                },
+                modifier = Modifier.size(44.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "Search",
+                    tint = if (isSearchExpanded) activeAccent.color else BoneWhite
+                )
+            }
         }
 
         HorizontalDivider(

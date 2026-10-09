@@ -46,6 +46,7 @@ import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.FolderCopy
 import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -204,7 +205,7 @@ fun FoldersTab(
                 }
             }
         } else {
-            // Main Folder List Header (matching Screenshot 2: "Folders      sort | search")
+            // Main Folder List Header: Capitalized header with Sort and Search icons
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -216,24 +217,26 @@ fun FoldersTab(
                     text = "Folders",
                     color = BoneWhite,
                     fontSize = 32.sp,
-                    fontWeight = FontWeight.Normal,
+                    fontWeight = FontWeight.Bold,
                     fontFamily = FontFamily.SansSerif,
                     letterSpacing = 0.5.sp
                 )
 
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Box {
-                        Text(
-                            text = "sort",
-                            color = Color(0xFFC0C0C8),
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Normal,
-                            modifier = Modifier
-                                .clickable { showSortMenu = true }
-                                .padding(horizontal = 6.dp, vertical = 4.dp)
-                        )
+                        IconButton(
+                            onClick = { showSortMenu = true },
+                            modifier = Modifier.size(44.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Sort,
+                                contentDescription = "Sort Folders",
+                                tint = BoneWhite
+                            )
+                        }
                         DropdownMenu(
                             expanded = showSortMenu,
                             onDismissRequest = { showSortMenu = false },
@@ -257,25 +260,19 @@ fun FoldersTab(
                         }
                     }
 
-                    Text(
-                        text = " | ",
-                        color = Color(0xFF707078),
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Normal
-                    )
-
-                    Text(
-                        text = "search",
-                        color = if (isSearchExpanded) activeAccent.color else Color(0xFFC0C0C8),
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Normal,
-                        modifier = Modifier
-                            .clickable {
-                                isSearchExpanded = !isSearchExpanded
-                                if (!isSearchExpanded) folderSearchQuery = ""
-                            }
-                            .padding(horizontal = 6.dp, vertical = 4.dp)
-                    )
+                    IconButton(
+                        onClick = {
+                            isSearchExpanded = !isSearchExpanded
+                            if (!isSearchExpanded) folderSearchQuery = ""
+                        },
+                        modifier = Modifier.size(44.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Search Folders",
+                            tint = if (isSearchExpanded) activeAccent.color else BoneWhite
+                        )
+                    }
                 }
             }
 

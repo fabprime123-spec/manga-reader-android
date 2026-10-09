@@ -105,18 +105,19 @@ fun SettingsTab(
     ) {
         // Title
         Text(
-            text = "READER SETTINGS & STORAGE",
+            text = "Settings",
             color = BoneWhite,
-            fontSize = 17.sp,
+            fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
-            fontFamily = FontFamily.Serif,
-            letterSpacing = 1.sp
+            fontFamily = FontFamily.SansSerif,
+            letterSpacing = 0.5.sp
         )
+        Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "Custom fonts, saturated accents, dark mode, and file scanning",
+            text = "Reader preferences, typography, themes & device storage",
             color = SilverMute,
-            fontSize = 11.sp,
-            fontFamily = FontFamily.Monospace
+            fontSize = 13.sp,
+            fontFamily = FontFamily.SansSerif
         )
 
         Spacer(modifier = Modifier.height(20.dp))
